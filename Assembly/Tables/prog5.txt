@@ -1,0 +1,99 @@
+*
+*Name: your name goes here
+*Class: ENSC 3213 (or your course number)
+*Term: The academic term
+*Date: Date you started the code
+*
+UCASE	EQU 	$FFA0
+WCHEK	EQU 	$FFA3
+DCHEK	EQU 	$FFA6
+INIT	EQU 	$FFA9	* use with caution
+INPUT	EQU 	$FFAC
+OUTPUT	EQU 	$FFAF
+OUTLHLF	EQU 	$FFB2
+OUTRHLF	EQU 	$FFB5
+OUTA	EQU 	$FFB8
+OUT1BYT	EQU 	$FFBB
+OUT1BSP	EQU 	$FFBE
+OUT2BSP	EQU 	$FFC1
+OUTCRLF	EQU 	$FFC4
+OUTSTRG	EQU 	$FFC7
+OUTSTRGO EQU 	$FFCA
+INCHAR	EQU 	$FFCD
+VECINIT	EQU 	$FFD0
+	ORG	$9000
+
+; setup some strings ...
+PREAMBLE
+	FCC	'====================================='
+	FCB	10
+	FCC	'LAB ON USING TABLES'
+	FCB	10,10	*USE 10 TO START A NEW LINE
+	FCC	'NAME: _____________________'
+	FCB	10
+	FCC	'THIS PROGRAM IS AN INFINITE LOOP!'
+	FCB	10
+	FCC	'HIT THE RESET BUTTON TO QUIT'
+	FCB	10
+	FCC	'====================================='
+	FCB	10,10,10,4
+
+	;setup the table of digits
+DIGITS	FCC	'0123456789'
+NDIGITS	EQU	11
+COUNT	RMB	2	
+	ORG	$9100
+	LDX	#PREAMBLE
+	JSR	OUTSTRG
+	LDAB	#10
+	STAB	COUNT	
+MAINLP
+	LDAB	COUNT
+	DECB
+	STAB	COUNT
+	BEQ	END
+	JSR	RDDIGIT
+	BRA	MAINLP
+END	SWI
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;RDDIGIT: Behaves like INCHAR, except ignores non-digits
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+RDDIGIT	JSR	INPUT	* This does not wait for the user
+	TSTA
+	BEQ	RDDIGIT	* Looks like the user has not typed anything
+;
+;if we	get here, the user typed something.Verify it first
+;
+	LDX	#DIGITS
+	LDAB	#NDIGITS
+	JSR	LOOKUP
+	BCC	RDDIGIT	* oops, not in the table. Go back for more
+;
+;if we get here, the input was ok
+;echo it back as the user would like some feedback
+;
+	JSR	OUTA
+	RTS
+*********************************************************
+LOOKUP
+	PSHB
+	PSHX
+STRTLP
+	
+	TSTB
+	BEQ	 GOHERE		* this is the basic counting loop
+	CMPA	0,X
+	BEQ 	FOUND
+	INX
+	DECB
+	BRA STRTLP
+GOHERE
+	CLC
+	PULX
+	PULB
+	RTS
+FOUND
+	SEC
+	PULX
+	PULB
+	RTS

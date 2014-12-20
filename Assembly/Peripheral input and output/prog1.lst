@@ -1,0 +1,141 @@
+AS11M 01.05  Mon Nov 03, 2014 18:08  prog1.lst
+
+0001                             *
+0002                             *Name: your name goes here
+0003                             *Class: ENSC 3213 (or your course number)
+0004                             *Term: The academic term
+0005                             *Date: Date you started the code
+0006                             *
+0007 ffa0                        UCASE	EQU 	$FFA0
+0008 ffa3                        WCHEK	EQU 	$FFA3
+0009 ffa6                        DCHEK	EQU 	$FFA6
+0010 ffa9                        INIT	EQU 	$FFA9	* use with caution
+0011 ffac                        INPUT	EQU 	$FFAC
+0012 ffaf                        OUTPUT	EQU 	$FFAF
+0013 ffb2                        OUTLHLF	EQU 	$FFB2
+0014 ffb5                        OUTRHLF	EQU 	$FFB5
+0015 ffb8                        OUTA	EQU 	$FFB8
+0016 ffbb                        OUT1BYT	EQU 	$FFBB
+0017 ffbe                        OUT1BSP	EQU 	$FFBE
+0018 ffc1                        OUT2BSP	EQU 	$FFC1
+0019 ffc4                        OUTCRLF	EQU 	$FFC4
+0020 ffc7                        OUTSTRG	EQU 	$FFC7
+0021 ffca                        OUTSTRGO EQU 	$FFCA
+0022 ffcd                        INCHAR	EQU 	$FFCD
+0023 ffd0                        VECINIT	EQU 	$FFD0
+0024 9000                        	ORG	$9000
+0025                             **** setup tables and main
+0026 9000 51 71                  LIGHTCHARSQ	FCC	'Qq'
+0027 0002                        NLCHARSQ	EQU	2
+0028 9002 5a 7a                  LIGHTCHARSZ	FCC	'Zz'
+0029 0002                        NLCHARSZ	EQU	2
+0030 9004 45 65                  LIGHTCHARSE	FCC	'Ee'
+0031 0002                        NLCHARSE	EQU	2
+0032 9006 43 63                  LIGHTCHARSC	FCC	'Cc'
+0033 0002                        NLCHARSC	EQU	2
+0034                             
+0035 9008 02                     DTWO	FCB	2
+0036 9009 02                     DTHREE	FCB	2
+0037 900a 02                     TEMP	FCB	2
+0038                             
+0039 9300                        		ORG	$9300
+0040 9300 86 00                  	LDAA	#00
+0041 9302 b7 10 00               	STAA	$1000
+0042 9305 b7 90 09               	STAA	DTHREE
+0043 9308 b7 90 08               	STAA	DTWO
+0044 930b                        MAINLOOP
+0045 930b bd ff cd               		JSR	INCHAR
+0046 930e ce 90 00               		LDX	#LIGHTCHARSQ
+0047 9311 c6 02                  		LDAB	#NLCHARSQ
+0048 9313 bd 93 85               		JSR	LOOKUP
+0049 9316 25 20                  		BCS	QFOUND
+0050 9318 ce 90 02               		LDX	#LIGHTCHARSZ
+0051 931b c6 02                  		LDAB	#NLCHARSZ
+0052 931d bd 93 85               		JSR	LOOKUP
+0053 9320 25 1d                  		BCS	ZFOUND
+0054 9322 ce 90 04               		LDX	#LIGHTCHARSE
+0055 9325 c6 02                  		LDAB	#NLCHARSE
+0056 9327 bd 93 85               		JSR	LOOKUP
+0057 932a 25 1a                  		BCS	EFOUND
+0058 932c ce 90 06               		LDX	#LIGHTCHARSC
+0059 932f c6 02                  		LDAB	#NLCHARSC
+0060 9331 bd 93 85               		JSR	LOOKUP
+0061 9334 25 17                  		BCS	CFOUND
+0062 9336 20 d3                  		BRA	MAINLOOP
+0063 9338                        QFOUND
+0064 9338 86 02                  		LDAA	#%10
+0065 933a b7 90 09               		STAA	DTHREE
+0066 933d 20 15                  		BRA	MOTHERBRAIN
+0067 933f                        ZFOUND
+0068 933f 86 00                  		LDAA	#%00
+0069 9341 b7 90 09               		STAA	DTHREE
+0070 9344 20 0e                  		BRA	MOTHERBRAIN
+0071 9346                        EFOUND
+0072 9346 86 01                  		LDAA	#%01
+0073 9348 b7 90 08               		STAA	DTWO
+0074 934b 20 07                  		BRA	MOTHERBRAIN
+0075 934d                        CFOUND
+0076 934d 86 00                  		LDAA	#%00
+0077 934f b7 90 08               		STAA	DTWO
+0078 9352 20 00                  		BRA	MOTHERBRAIN
+0079                             
+0080 9354                        MOTHERBRAIN	
+0081 9354 0c                     		CLC
+0082 9355 b6 90 09               		LDAA	DTHREE
+0083 9358 ba 90 08               		ORAA	DTWO
+0084 935b 27 0c                  		BEQ	OFF
+0085 935d 81 01                  		CMPA	#01
+0086 935f 27 0f                  		BEQ	RIGHTON
+0087 9361 81 02                  		CMPA	#02
+0088 9363 27 12                  		BEQ	MIDON
+0089 9365 81 03                  		CMPA	#03
+0090 9367 27 15                  		BEQ	BOTHON
+0091                             	
+0092                             
+0093 9369                        OFF
+0094 9369 86 00                  		LDAA	#$00
+0095 936b b7 10 00               		STAA	$1000
+0096 936e 20 9b                  		BRA	MAINLOOP
+0097 9370                        RIGHTON
+0098 9370 86 10                  		LDAA	#$10
+0099 9372 b7 10 00               		STAA	$1000
+0100 9375 20 94                  		BRA	MAINLOOP
+0101 9377                        MIDON
+0102 9377 86 20                  		LDAA	#$20
+0103 9379 b7 10 00               		STAA	$1000
+0104 937c 20 8d                  		BRA	MAINLOOP
+0105 937e                        BOTHON
+0106 937e 86 30                  		LDAA	#$30
+0107 9380 b7 10 00               		STAA	$1000
+0108 9383 20 86                  		BRA	MAINLOOP
+0109                             		
+0110                             	
+0111                             	
+0112                             	
+0113                             ****lookup*********************************************************
+0114 9385                        LOOKUP
+0115 9385 37                     	PSHB
+0116 9386 3c                     	PSHX
+0117 9387                        STRTLP
+0118                             	
+0119 9387 5d                     	TSTB
+0120 9388 27 08                  	BEQ	 GOHERE		* this is the basic counting loop
+0121 938a a1 00                  	CMPA	0,X
+0122 938c 27 08                  	BEQ 	FOUND
+0123 938e 08                     	INX
+0124 938f 5a                     	DECB
+0125 9390 20 f5                  	BRA STRTLP
+0126 9392                        GOHERE
+0127 9392 0c                     	CLC
+0128 9393 38                     	PULX
+0129 9394 33                     	PULB
+0130 9395 39                     	RTS
+0131 9396                        FOUND
+0132 9396 0d                     	SEC
+0133 9397 38                     	PULX
+0134 9398 33                     	PULB
+0135 9399 39                     	RTS
+
+
+Number of errors 0
+Number of warnings 0

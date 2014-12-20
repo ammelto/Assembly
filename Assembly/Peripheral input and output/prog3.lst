@@ -1,0 +1,66 @@
+AS11M 01.05  Mon Nov 10, 2014 17:07  prog3.lst
+
+0001                             
+0002 ffa0                        UCASE	EQU 	$FFA0
+0003 ffa3                        WCHEK	EQU 	$FFA3
+0004 ffa6                        DCHEK	EQU 	$FFA6
+0005 ffa9                        INIT	EQU 	$FFA9	* use with caution
+0006 ffac                        INPUT	EQU 	$FFAC
+0007 ffaf                        OUTPUT	EQU 	$FFAF
+0008 ffb2                        OUTLHLF	EQU 	$FFB2
+0009 ffb5                        OUTRHLF	EQU	$FFB5
+0010 ffb8                        OUTA	EQU	$FFB8
+0011 ffbb                        OUT1BYT	EQU	$FFBB
+0012 ffbe                        OUT1BSP	EQU 	$FFBE
+0013 ffc1                        OUT2BSP	EQU 	$FFC1
+0014 ffc4                        OUTCRLF	EQU 	$FFC4
+0015 ffc7                        OUTSTRG	EQU 	$FFC7
+0016 ffca                        OUTSTRGO EQU 	$FFCA
+0017 ffcd                        INCHAR	EQU 	$FFCD
+0018 ffd0                        VECINIT	EQU 	$FFD0
+0019 1025                        TFLG2	EQU 	$1025
+0020 1000                        PORTA	EQU	$1000
+0021                             
+0022                             ; Various defines go here ...
+0023 9000                        	ORG $9000
+0024 9000 59 6f 75 72 20 6e      INFO 	FCC 'Your name'
+          61 6d 65
+0025 9009 0a                     	FCB 	10
+0026 900a 45 4e 53 43 20 33      	FCC 	'ENSC 3213'
+          32 31 33
+0027 9013 0a                     	FCB 	10
+0028 9014 44 61 74 65 20 74      	FCC 	'Date the program was last changed'
+          68 65 20 70 72 6f
+          67 72 61 6d 20 77
+          61 73 20 6c 61 73
+          74 20 63 68 61 6e
+          67 65 64
+0029 9035 0a 0a 04               	FCB	 10,10,4
+0030                             
+0031 9100                        	ORG $9100
+0032 9100 ce 90 00               	LDX	 #INFO
+0033 9103 bd ff c7               	JSR 	OUTSTRG
+0034                             
+0035                             ; CLEAR THE FLAG TO INITIALIZE
+0036 9106                        LOOP1
+0037 9106 86 80                  	LDAA 	#%10000000
+0038 9108 b7 10 25               	STAA	 TFLG2
+0039                             
+0040                             ;WAIT FOR THE FLAG TO BE SET
+0041 910b                        LOOP2
+0042 910b b6 10 25               	LDAA	 TFLG2
+0043 910e 84 80                  	ANDA	 #%10000000
+0044 9110 27 f9                  	BEQ	 LOOP2
+0045                             
+0046                             ;NOW TOGGLE PA4
+0047 9112 86 10                  	LDAA	 #%00010000
+0048 9114 b8 10 00               	EORA	 PORTA
+0049 9117 b7 10 00               	STAA 	 PORTA
+0050                             
+0051                             ;DO IT ALL OVER AGAIN
+0052 911a 20 ea                  	BRA 	LOOP1
+0053                             	
+
+
+Number of errors 0
+Number of warnings 0

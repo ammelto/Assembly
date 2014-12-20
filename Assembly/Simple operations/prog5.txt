@@ -1,0 +1,49 @@
+;=========================================================
+;This is a program that will read a two digit decimal number from the user. 
+;=========================================================
+OUTLHLF EQU	$FFB2
+OUTRHLF EQU	$FFB5
+INCHAR	EQU 	$FFCD
+OUTSTRG	EQU	$FFC7
+OUTCRLF EQU	$FFC4
+
+	ORG	$8000
+MAIN
+	JSR	ReadDecimal
+	SWI
+
+	ORG	$8200
+ReadDecimal
+	LDX	#PROMPT
+	JSR	OUTSTRG
+	JSR	OUTCRLF
+	JSR	INCHAR
+	ANDA	#$0F
+	STAA	FIRST
+	JSR	INCHAR
+	ANDA	#$0F
+	STAA	SECOND
+	LSL	FIRST
+	LSL	FIRST
+	LSL	FIRST
+	LSL	FIRST
+	ADDA	FIRST
+	STAA	DECIMALLN
+	JSR	OUTCRLF
+	LDAA	DECIMALLN
+	JSR	OUTLHLF
+	LDAA	DECIMALLN
+	JSR	OUTRHLF
+	RTS
+
+
+	ORG	$9000
+PROMPT	FCC	'Enter a value, yo'
+	FCB	4
+
+FIRST		FCB	1
+SECOND		FCB	1
+DECIMALLN	FCB	1
+
+
+	

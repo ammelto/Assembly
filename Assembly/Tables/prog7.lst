@@ -1,0 +1,145 @@
+AS11M 01.05  Mon Oct 27, 2014 18:05  prog7.lst
+
+0001                             *
+0002                             *Name: your name goes here
+0003                             *Class: ENSC 3213 (or your course number)
+0004                             *Term: The academic term
+0005                             *Date: Date you started the code
+0006                             *
+0007 ffa0                        UCASE	EQU 	$FFA0
+0008 ffa3                        WCHEK	EQU 	$FFA3
+0009 ffa6                        DCHEK	EQU 	$FFA6
+0010 ffa9                        INIT	EQU 	$FFA9	* use with caution
+0011 ffac                        INPUT	EQU 	$FFAC
+0012 ffaf                        OUTPUT	EQU 	$FFAF
+0013 ffb2                        OUTLHLF	EQU 	$FFB2
+0014 ffb5                        OUTRHLF	EQU 	$FFB5
+0015 ffb8                        OUTA	EQU 	$FFB8
+0016 ffbb                        OUT1BYT	EQU 	$FFBB
+0017 ffbe                        OUT1BSP	EQU 	$FFBE
+0018 ffc1                        OUT2BSP	EQU 	$FFC1
+0019 ffc4                        OUTCRLF	EQU 	$FFC4
+0020 ffc7                        OUTSTRG	EQU 	$FFC7
+0021 ffca                        OUTSTRGO EQU 	$FFCA
+0022 ffcd                        INCHAR	EQU 	$FFCD
+0023 ffd0                        VECINIT	EQU 	$FFD0
+0024 9000                        	ORG	$9000
+0025                             
+0026                             ; setup some strings ...
+0027 9000                        PREAMBLE
+0028 9000 3d 3d 3d 3d 3d 3d      	FCC	'====================================='
+          3d 3d 3d 3d 3d 3d
+          3d 3d 3d 3d 3d 3d
+          3d 3d 3d 3d 3d 3d
+          3d 3d 3d 3d 3d 3d
+          3d 3d 3d 3d 3d 3d
+          3d
+0029 9025 0a                     	FCB	10
+0030 9026 4c 41 42 20 4f 4e      	FCC	'LAB ON USING TABLES'
+          20 55 53 49 4e 47
+          20 54 41 42 4c 45
+          53
+0031 9039 0a 0a                  	FCB	10,10	*USE 10 TO START A NEW LINE
+0032 903b 4e 41 4d 45 3a 20      	FCC	'NAME: _____________________'
+          5f 5f 5f 5f 5f 5f
+          5f 5f 5f 5f 5f 5f
+          5f 5f 5f 5f 5f 5f
+          5f 5f 5f
+0033 9056 0a                     	FCB	10
+0034 9057 54 48 49 53 20 50      	FCC	'THIS PROGRAM IS AN INFINITE LOOP!'
+          52 4f 47 52 41 4d
+          20 49 53 20 41 4e
+          20 49 4e 46 49 4e
+          49 54 45 20 4c 4f
+          4f 50 21
+0035 9078 0a                     	FCB	10
+0036 9079 48 49 54 20 54 48      	FCC	'HIT THE RESET BUTTON TO QUIT'
+          45 20 52 45 53 45
+          54 20 42 55 54 54
+          4f 4e 20 54 4f 20
+          51 55 49 54
+0037 9095 0a                     	FCB	10
+0038 9096 3d 3d 3d 3d 3d 3d      	FCC	'====================================='
+          3d 3d 3d 3d 3d 3d
+          3d 3d 3d 3d 3d 3d
+          3d 3d 3d 3d 3d 3d
+          3d 3d 3d 3d 3d 3d
+          3d 3d 3d 3d 3d 3d
+          3d
+0039 90bb 0a 0a 0a 04            	FCB	10,10,10,4
+0040 90bf 2d                     DASH	FCC	'-'
+0041 90c0 0a 04                  	FCB	10,4
+0042                             **** setup tables and main
+0043                             
+0044 90c2 30 31 32 33 34 35      PHONECHARS	FCC	'0123456789AaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZz'
+          36 37 38 39 41 61
+          42 62 43 63 44 64
+          45 65 46 66 47 67
+          48 68 49 69 4a 6a
+          4b 6b 4c 6c 4d 6d
+          4e 6e 4f 6f 50 70
+          51 71 52 72 53 73
+          54 74 55 75 56 76
+          57 77 58 78 59 79
+          5a 7a
+0045 9100 30 31 32 33 34 35      PHONETRANS	FCC	'01234567892222223333334444445555556666667777777788888899999999'
+          36 37 38 39 32 32
+          32 32 32 32 33 33
+          33 33 33 33 34 34
+          34 34 34 34 35 35
+          35 35 35 35 36 36
+          36 36 36 36 37 37
+          37 37 37 37 37 37
+          38 38 38 38 38 38
+          39 39 39 39 39 39
+          39 39
+0046 003e                        NPHONECHARS	EQU	62
+0047 9300                        		ORG	$9300
+0048 9300 ce 90 00               		LDX #PREAMBLE
+0049 9303 bd ff c7               		JSR OUTSTRG
+0050 9306                        MAINLOOP
+0051 9306 bd ff cd               		JSR	INCHAR
+0052 9309 ce 90 c2               		LDX	#PHONECHARS
+0053 930c c6 3e                  		LDAB	#NPHONECHARS
+0054 930e bd 93 20               		JSR	LOOKUP
+0055 9311 36                     		PSHA
+0056 9312 86 20                  		LDAA	#' '
+0057 9314 bd ff b8               		JSR	OUTA
+0058 9317 32                     		PULA
+0059 9318 bd ff b8               		JSR	OUTA
+0060 931b bd ff c4               		JSR	OUTCRLF
+0061 931e 20 e6                  		BRA	MAINLOOP
+0062                             
+0063                             
+0064                             
+0065                             
+0066                             
+0067                             ****lookup
+0068                             *********************************************************
+0069 9320                        LOOKUP
+0070 9320 37                     	PSHB
+0071 9321 3c                     	PSHX
+0072 9322                        STRTLP
+0073                             	
+0074 9322 5d                     	TSTB
+0075 9323 27 08                  	BEQ	 GOHERE		* this is the basic counting loop
+0076 9325 a1 00                  	CMPA	0,X
+0077 9327 27 08                  	BEQ 	FOUND
+0078 9329 08                     	INX
+0079 932a 5a                     	DECB
+0080 932b 20 f5                  	BRA STRTLP
+0081 932d                        GOHERE
+0082 932d 0c                     	CLC
+0083 932e 38                     	PULX
+0084 932f 33                     	PULB
+0085 9330 39                     	RTS
+0086 9331                        FOUND
+0087 9331 0d                     	SEC
+0088 9332 a6 3e                  	LDAA	62,X
+0089 9334 38                     	PULX
+0090 9335 33                     	PULB
+0091 9336 39                     	RTS
+
+
+Number of errors 0
+Number of warnings 0

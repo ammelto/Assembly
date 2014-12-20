@@ -1,0 +1,46 @@
+AS11M 01.05  Mon Oct 20, 2014 15:43  prog6.lst
+
+0001 ffb2                        OUTLHLF EQU	$FFB2
+0002 ffb5                        OUTRHLF EQU	$FFB5
+0003 ffcd                        INCHAR	EQU 	$FFCD
+0004 ffc7                        OUTSTRG	EQU	$FFC7
+0005 ffc4                        OUTCRLF EQU	$FFC4
+0006                             
+0007 8000                        	ORG	$8000
+0008 8000                        MAIN
+0009 8000 86 00                  	LDAA	#$0
+0010 8002 b7 90 02               	STAA	VALUE
+0011 8005 86 01                  	LDAA	#$1
+0012 8007 b7 90 01               	STAA	DELTA
+0013 800a 86 0b                  	LDAA	#$B
+0014 800c b7 90 03               	STAA	COUNT
+0015 800f 27 28                  LOOP	BEQ	END
+0016 8011 b6 90 02               	LDAA	VALUE
+0017 8014 bd ff b2               	JSR	OUTLHLF
+0018 8017 b6 90 02               	LDAA	VALUE
+0019 801a bd ff b5               	JSR	OUTRHLF
+0020 801d ce 90 00               	LDX	#PROMPT
+0021 8020 bd ff c7               	JSR	OUTSTRG
+0022 8023 b6 90 02               	LDAA	VALUE
+0023 8026 bb 90 01               	ADDA	DELTA
+0024 8029 b7 90 02               	STAA	VALUE
+0025 802c b6 90 01               	LDAA	DELTA
+0026 802f 8b 02                  	ADDA	#$2
+0027 8031 b7 90 01               	STAA	DELTA
+0028 8034 7a 90 03               	DEC	COUNT
+0029 8037 20 d6                  	BRA	LOOP
+0030 8039 3f                     END	SWI
+0031                             
+0032                             
+0033                             
+0034 9000                        	ORG	$9000
+0035                             
+0036 9000                        PROMPT	FCC	''
+0037 9000 04                     	FCB	4
+0038 9001 01                     DELTA		FCB	1
+0039 9002 01                     VALUE		FCB	1
+0040 9003 01                     COUNT		FCB	1
+
+
+Number of errors 0
+Number of warnings 0

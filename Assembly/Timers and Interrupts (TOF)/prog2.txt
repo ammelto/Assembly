@@ -1,0 +1,80 @@
+UCASE	EQU 	$FFA0
+WCHEK	EQU 	$FFA3
+DCHEK	EQU 	$FFA6
+INIT	EQU 	$FFA9	* use with caution
+INPUT	EQU 	$FFAC
+OUTPUT	EQU 	$FFAF
+OUTLHLF	EQU 	$FFB2
+OUTRHLF	EQU	$FFB5
+OUTA	EQU	$FFB8
+OUT1BYT	EQU	$FFBB
+OUT1BSP	EQU 	$FFBE
+OUT2BSP	EQU 	$FFC1
+OUTCRLF	EQU 	$FFC4
+OUTSTRG	EQU 	$FFC7
+OUTSTRGO EQU 	$FFCA
+INCHAR	EQU 	$FFCD
+VECINIT	EQU 	$FFD0
+TFLG2	EQU 	$1025
+PORTA	EQU	$1000
+TMSK2	EQU	$1024
+PACTL	EQU	$1026
+
+	ORG	$8000
+ME	FCC	'Your name'	
+	FCB	10
+	FCC	'ENSC 3213'
+	FCB	10
+	FCC	'Date the program was last changed'
+	FCB 	10,10, 4
+COUNT	FCB	4
+TIME	FCB	8
+
+	ORG	$9000
+	LDAA	#61
+	STAA	COUNT
+	LDX	#ME
+	JSR	OUTSTRG	;MAKE SURE YOU HAVE EQU FOR OUTSTRG
+
+LOOP1
+	SEI 		;Disable the overall interrupt first
+			;Enable TOF interrupt by setting TOI (bit#7 in TMSK2)
+	LDAA	#%01000000 ;<= This is different, yo
+	STAA	TMSK2
+	LDAA	#%00000001	;<= This is new, yo
+	STAA	PACTL
+	CLI		;Enable the overall interrupt
+			;Now go about your business of printing Z's
+	;LDAA	#'Z'
+LOOP	JSR	OUT1BSP
+	BRA	LOOP
+
+CountSet
+	;TOGGLE PA4
+	LDAA	#%00010000
+	EORA	PORTA
+	STAA	PORTA
+	LDAA	#61
+	STAA	COUNT
+	LDAA	TIME
+	JSR	OUTA
+	ADDA	#1
+	STAA	TIME
+	BRA	END
+	
+	
+			;End of main program
+			;INTERRUPT SERVICE (ISR)
+SERVICE			
+			;TURN OFF THE FLAG!
+	LDAA	#%01000000	;<= This, my friend, is also different
+	STAA	TFLG2
+			;END WITH AN RTI
+	LDAA	COUNT
+	DECA
+	STAA	COUNT
+	BEQ	CountSet
+END	RTI
+			;Connect the service to the interrupt;
+	ORG	$00EB	;$00D0 WHERE THE SERVICE STARTS
+	JMP	SERVICE	;JUMP TO WHERE THE SERVICE CODE ACTUALLY IS

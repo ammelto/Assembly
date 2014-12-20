@@ -1,0 +1,54 @@
+AS11M 01.05  Mon Oct 13, 2014 17:26  prog5.lst
+
+0001 ffb2                        OUTLHLF EQU	$FFB2
+0002 ffb5                        OUTRHLF EQU	$FFB5
+0003 ffcd                        INCHAR	EQU 	$FFCD
+0004 ffc7                        OUTSTRG	EQU	$FFC7
+0005 ffc4                        OUTCRLF EQU	$FFC4
+0006                             
+0007 8000                        	ORG	$8000
+0008 8000                        MAIN
+0009 8000 bd 82 00               	JSR	ReadDecimal
+0010 8003 3f                     	SWI
+0011                             
+0012 8200                        	ORG	$8200
+0013 8200                        ReadDecimal
+0014 8200 ce 90 00               	LDX	#PROMPT
+0015 8203 bd ff c7               	JSR	OUTSTRG
+0016 8206 bd ff c4               	JSR	OUTCRLF
+0017 8209 bd ff cd               	JSR	INCHAR
+0018 820c 84 0f                  	ANDA	#$0F
+0019 820e b7 90 12               	STAA	FIRST
+0020 8211 bd ff cd               	JSR	INCHAR
+0021 8214 84 0f                  	ANDA	#$0F
+0022 8216 b7 90 13               	STAA	SECOND
+0023 8219 78 90 12               	LSL	FIRST
+0024 821c 78 90 12               	LSL	FIRST
+0025 821f 78 90 12               	LSL	FIRST
+0026 8222 78 90 12               	LSL	FIRST
+0027 8225 bb 90 12               	ADDA	FIRST
+0028 8228 b7 90 14               	STAA	DECIMALLN
+0029 822b bd ff c4               	JSR	OUTCRLF
+0030 822e b6 90 14               	LDAA	DECIMALLN
+0031 8231 bd ff b2               	JSR	OUTLHLF
+0032 8234 b6 90 14               	LDAA	DECIMALLN
+0033 8237 bd ff b5               	JSR	OUTRHLF
+0034 823a 39                     	RTS
+0035                             
+0036                             
+0037 9000                        	ORG	$9000
+0038 9000 45 6e 74 65 72 20      PROMPT	FCC	'Enter a value, yo'
+          61 20 76 61 6c 75
+          65 2c 20 79 6f
+0039 9011 04                     	FCB	4
+0040                             
+0041 9012 01                     FIRST		FCB	1
+0042 9013 01                     SECOND		FCB	1
+0043 9014 01                     DECIMALLN	FCB	1
+0044                             
+0045                             
+0046                             	
+
+
+Number of errors 0
+Number of warnings 0

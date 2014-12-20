@@ -1,0 +1,61 @@
+  ADDR B1 B2 B3 B4 thrass11.tmp                                     PAGE       1
+
+                   OUTLHLF EQU     $FFB2
+                   OUTRHLF EQU     $FFB5
+                   INCHAR  EQU     $FFCD
+                   OUTSTRG EQU     $FFC7
+                           ORG     $8000
+                   MAIN
+  8000 CE 90 03            LDX     #PROMPT
+  8003 BD FF C7            JSR     OUTSTRG
+  8006 BD FF CD            JSR     INCHAR
+  8009 84 0F               ANDA    #$0F
+  800B B7 90 01            STAA    COUNT
+  800E 86 00               LDAA    #0
+  8010 B7 90 00            STAA    V
+  8013 B7 90 02            STAA    TOTAL
+                   *       *LDAA   #5
+                   *       *STAA   COUNT
+  8016 27 12       loop    BEQ     END
+  8018 B6 90 00            LDAA    V
+  801B 4C                  INCA
+  801C B7 90 00            STAA    V
+  801F BB 90 02            ADDA    TOTAL
+  8022 B7 90 02            STAA    TOTAL
+  8025 7A 90 01            DEC     COUNT
+  8028 20 EC               BRA     loop
+                   ; PRINT TOTAL AS 2 DIGIT HEX NUMBER
+  802A B6 90 02    END     LDAA    TOTAL
+  802D BD FF B2            JSR     OUTLHLF
+  8030 B6 90 02            LDAA    TOTAL
+  8033 BD FF B5            JSR     OUTRHLF
+  8036 3F                  SWI
+
+                           ORG     $9000
+  9000 01          V       FCB     1
+  9001 01          COUNT   FCB     1
+  9002 01          TOTAL   FCB     1
+
+  9003 48 6F 77 20 PROMPT  FCC     'How many times?'
+. 9007 6D 61 6E 79
+. 900B 20 00 69 6D
+. 900F 65 73 3F
+  9012 04                  FCB     4
+                   *       OPT     S
+
+
+
+
+  Symbol Table 
+
+  INCHAR             FFCD
+  PROMPT             9003
+  V                  9000
+  COUNT              9001
+  OUTLHLF            FFB2
+  OUTRHLF            FFB5
+  MAIN               8000
+  END                802A
+  TOTAL              9002
+  OUTSTRG            FFC7
+  LOOP               8016

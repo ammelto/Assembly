@@ -1,0 +1,14 @@
+AS11M 01.05  Mon Oct 20, 2014 15:57  prog1.lst
+
+0001 9000                        		ORG	$9000
+0002 9000 30 31 32 33 34 35      DIGITS1		FCB	$30,$31,$32,$33,$34,$35,$36,$37,$38,$39
+          36 37 38 39
+0003 000a                        NDIGITS1 	EQU	10
+0004                             
+0005 900a 30 31 32 33 34 35      DIGITS2		FCC	'0123456789'
+          36 37 38 39
+0006 000a                        NDIGITS2	EQU	10
+
+
+Number of errors 0
+Number of warnings 0

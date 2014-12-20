@@ -1,0 +1,143 @@
+
+* Here is a program that uses the function:
+*
+* Name: your name goes here
+* Class: ENSC 3213 (or your course number)
+* Term:
+* The academic term
+* Date: Date you started the code
+*
+
+UCASE	EQU 	$FFA0
+WCHEK	EQU 	$FFA3
+DCHEK	EQU 	$FFA6
+INIT	EQU 	$FFA9	* use with caution
+INPUT	EQU 	$FFAC
+OUTPUT	EQU 	$FFAF
+OUTLHLF	EQU 	$FFB2
+OUTRHLF	EQU	$FFB5
+OUTA	EQU	$FFB8
+OUT1BYT	EQU	$FFBB
+OUT1BSP	EQU 	$FFBE
+OUT2BSP	EQU 	$FFC1
+OUTCRLF	EQU 	$FFC4
+OUTSTRG	EQU 	$FFC7
+OUTSTRGO EQU 	$FFCA
+INCHAR	EQU 	$FFCD
+VECINIT	EQU 	$FFD0
+
+	ORG $9000
+
+; setup some strings
+PREAMBLE
+	FCC	'====================================='
+	FCB 	10
+	FCC	'LAB ON USING TABLES'
+	FCB 10,10	* USE 10 TO START A NEW LINE
+	FCC	'NAME: _____________________'
+	FCB 10
+	FCC	'THIS PROGRAM IS AN INFINITE LOOP!'
+	FCB 10
+	FCC	'HIT THE RESET BUTTON TO QUIT/'
+	FCB 10
+	FCC	'====================================='
+	FCB 	10,10,10,4
+YESSTR	FCC 'IS A VOWEL'
+	FCB 10,4
+NOSTR	FCC	'IS NOT A VOWEL'
+	FCB 10,4
+YESSYM	FCC	' AND IS SYMMETRICAL'
+	FCB 10,4
+NOSYM	FCC	' AND IS NOT SYMMETRICAL'
+	FCB 10,4
+
+; setup the table of vowels
+SYM	FCC	'AHIMOTUVWXYimnouvwxy'
+NSYM	EQU	22
+VOWELS	FCC	'aeiouAEIOU'
+NVOWELS	EQU	 10
+	ORG	$9100
+	LDX #PREAMBLE
+	JSR OUTSTRG
+MAINLOOP
+	JSR	INCHAR
+	LDX	#VOWELS
+	LDAB	#NVOWELS
+	JSR	LOOKUP
+	BCS	ISVOWEL
+	LDX	#NOSTR
+	JSR	OUTSTRGO
+	LDX	#SYM
+	LDAB	#NSYM
+	JSR	LOOKUPSYM
+	BCS	ISSYM
+	LDX	#NOSYM
+	JSR	OUTSTRGO
+	BRA	MAINLOOP
+ISVOWEL
+	LDX #YESSTR
+	JSR OUTSTRGO
+	LDX	#SYM
+	LDAB	#NSYM
+	JSR	LOOKUPSYM
+	BCS	ISSYM
+	LDX	#NOSYM
+	JSR	OUTSTRGO
+	BRA	MAINLOOP
+ISSYM
+	LDX	 #ISSYM
+	JSR	OUTSTRGO
+	BRA	MAINLOOP
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; lookup: Function to lookup a value in a table
+; Checks if the value in A register is in the table
+;
+; Entry: Starting address in X, size in B, value in A
+;	 Exit:
+;	Carry set if the value in A is in the table;
+; cleared if not in the table
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+LOOKUP
+	PSHB
+	PSHX
+STRTLP
+	
+	TSTB
+	BEQ	 GOHERE		* this is the basic counting loop
+	CMPA	0,X
+	BEQ 	FOUND
+	INX
+	DECB
+	BRA STRTLP
+GOHERE
+	CLC
+	PULX
+	PULB
+	RTS
+FOUND
+	SEC
+	PULX
+	PULB
+	RTS
+*******************************************************************
+LOOKUPSYM
+	PSHB
+	PSHX
+STRTLPSYM
+	TSTB
+	BEQ	 GOHERESYM		* this is the basic counting loop
+	CMPA	0,X
+	BEQ 	FOUNDSYM
+	INX
+	DECB
+	BRA STRTLPSYM
+GOHERESYM
+	CLC
+	PULX
+	PULB
+	RTS
+FOUNDSYM
+	SEC
+	PULX
+	PULB
+	RTS

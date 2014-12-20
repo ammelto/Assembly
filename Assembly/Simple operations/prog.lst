@@ -1,0 +1,55 @@
+AS11M 01.05  Mon Oct 06, 2014 16:44  prog.lst
+
+0001 ffb2                        OUTLHLF	EQU	$FFB2
+0002 ffb5                        OUTRHLF	EQU	$FFB5
+0003                             
+0004 8000                        	ORG	$8000
+0005 8000                        MAIN
+0006                             	; V1 = 11;
+0007 8000 86 0b                  	LDAA	#11
+0008 8002 b7 90 00               	STAA	V1
+0009                             	; V2 = 0X2F;
+0010 8005 86 2f                  	LDAA	#$2F
+0011 8007 b7 90 01               	STAA	V2
+0012                             	; V3 = 'A';
+0013 800a 86 41                  	LDAA	#'A'
+0014 800c b7 90 02               	STAA	V3
+0015                             	; V4 =	044;
+0016 800f 86 24                  	LDAA	#@44
+0017 8011 b7 90 03               	STAA	V4
+0018                             	; TOTAL=V1+V2+V3+V4;
+0019 8014 b6 90 00               	LDAA	V1
+0020 8017 bb 90 01               	ADDA	V2
+0021 801a bb 90 02               	ADDA	V3
+0022 801d bb 90 03               	ADDA	V4
+0023 8020 b7 90 04               	STAA	TOTAL
+0024                             ; PRINT	TOTAL AS 2 DIGIT HEX NUMBER
+0025 8023 b6 90 04               	LDAA	TOTAL
+0026 8026 bd ff b2               	JSR	OUTLHLF
+0027 8029 b6 90 04               	LDAA	TOTAL
+0028 802c bd ff b5               	JSR	OUTRHLF
+0029 802f 3f                     	SWI
+0030 9000                        	ORG	$9000
+0031 9000                        V1	RMB	1
+0032 9001                        V2	RMB	1
+0033 9002                        V3	RMB	1
+0034 9003                        V4	RMB	1
+0035 9004                        TOTAL	RMB	1
+0036                             	OPT	S
+
+AS11M 01.05  Mon Oct 06, 2014 16:44  prog.lst
+
+Symbol table:
+
+MAIN             8000
+OUTLHLF          ffb2
+OUTRHLF          ffb5
+TOTAL            9004
+V1               9000
+V2               9001
+V3               9002
+V4               9003
+
+
+Number of errors 0
+Number of warnings 0

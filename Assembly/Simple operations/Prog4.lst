@@ -1,0 +1,85 @@
+AS11M 01.05  Mon Oct 13, 2014 17:03  Prog4.lst
+
+0001 ffb2                        OUTLHLF EQU	$FFB2
+0002 ffb5                        OUTRHLF EQU	$FFB5
+0003 ffcd                        INCHAR	EQU 	$FFCD
+0004 ffc7                        OUTSTRG	EQU	$FFC7
+0005 ffc4                        OUTCRLF EQU	$FFC4
+0006                             
+0007 8000                        	ORG $8000
+0008 8000                        MAIN
+0009 8000 ce 90 03               	LDX	#PROMPT
+0010 8003 bd ff c7               	JSR	OUTSTRG
+0011 8006 bd ff c4               	JSR	OUTCRLF
+0012 8009 bd ff cd               	JSR	INCHAR
+0013 800c 84 0f                  	ANDA	#$0F
+0014 800e b7 90 00               	STAA	INPUT
+0015 8011 48                     	LSLA
+0016 8012 48                     	LSLA
+0017 8013 48                     	LSLA
+0018 8014 bb 90 00               	ADDA	INPUT
+0019 8017 bb 90 00               	ADDA	INPUT
+0020 801a b7 90 01               	STAA	TENS
+0021                             *
+0022 801d ce 90 0a               	LDX	#PROMPT2
+0023 8020 bd ff c7               	JSR	OUTSTRG
+0024 8023 bd ff c4               	JSR	OUTCRLF
+0025 8026 bd ff cd               	JSR	INCHAR
+0026 8029 84 0f                  	ANDA	#$0F
+0027 802b bb 90 01               	ADDA	TENS
+0028 802e b7 90 02               	STAA	DECIMALLN
+0029 8031 bd ff c4               	JSR	OUTCRLF
+0030 8034 ce 90 17               	LDX	#PROMPT3
+0031 8037 bd ff c7               	JSR	OUTSTRG
+0032 803a b6 90 02               	LDAA	DECIMALLN
+0033 803d bd ff b2               	JSR	OUTLHLF
+0034 8040 b6 90 02               	LDAA	DECIMALLN
+0035 8043 bd ff b5               	JSR	OUTRHLF
+0036 8046 ce 90 24               	LDX	#PROMPT4
+0037 8049 bd ff c7               	JSR	OUTSTRG
+0038 804c b6 90 01               	LDAA	TENS
+0039 804f bd ff b2               	JSR	OUTLHLF
+0040 8052 b6 90 01               	LDAA	TENS
+0041 8055 bd ff b5               	JSR	OUTRHLF
+0042 8058 3f                     	SWI
+0043                             
+0044 9000                        	ORG	$9000
+0045 9000 01                     INPUT		FCB	1
+0046 9001 01                     TENS		FCB	1
+0047 9002 01                     DECIMALLN	FCB	1
+0048                             
+0049 9003 56 41 4c 55 45 3f      PROMPT	FCC	'VALUE?'
+0050 9009 04                     	FCB	4
+0051 900a 53 45 43 4f 4e 44      PROMPT2	FCC	'SECOND VALUE'
+          20 56 41 4c 55 45
+0052 9016 04                     	FCB	4
+0053 9017 44 45 43 49 4d 41      PROMPT3	FCC	'DECIMALLN = '
+          4c 4c 4e 20 3d 20
+0054 9023 04                     	FCB	4
+0055 9024 54 45 4e 53 20 3d      PROMPT4	FCC	'TENS = '
+          20
+0056 902b 04                     	FCB	4
+0057                             	OPT	S
+0058                             	
+
+AS11M 01.05  Mon Oct 13, 2014 17:03  Prog4.lst
+
+Symbol table:
+
+DECIMALLN        9002
+INCHAR           ffcd
+INPUT            9000
+MAIN             8000
+OUTCRLF          ffc4
+OUTLHLF          ffb2
+OUTRHLF          ffb5
+OUTSTRG          ffc7
+PROMPT           9003
+PROMPT2          900a
+PROMPT3          9017
+PROMPT4          9024
+TENS             9001
+
+
+Number of errors 0
+Number of warnings 0

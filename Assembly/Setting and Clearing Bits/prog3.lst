@@ -1,0 +1,221 @@
+AS11M 01.05  Mon Sep 29, 2014 17:32  prog3.lst
+
+0001                             ;
+0002                             ; Standard Buffalo Functions
+0003                             ; It’s a good idea to use these often and in future designs
+0004                             ;
+0005 ffa0                        UCASE	EQU	$FFA0
+0006 ffa3                        WCHEK	EQU	$FFA3
+0007 ffa6                        DCHEK	EQU	$FFA6
+0008 ffa9                        INIT	EQU	$FFA9
+0009 ffac                        INPUT	EQU	$FFAC
+0010 ffaf                        OUTPUT	EQU	$FFAF
+0011 ffb2                        OUTLHLF	EQU	$FFB2
+0012 ffb5                        OUTRHLF	EQU	$FFB5
+0013 ffb8                        OUTA	EQU	$FFB8
+0014 ffbb                        OUT1BYT	EQU	$FFBB
+0015 ffbe                        OUT1BSP	EQU	$FFBE
+0016 ffc1                        OUT2BSP	EQU	$FFC1
+0017 ffc4                        OUTCRLF	EQU	$FFC4
+0018 ffc7                        OUTSTRG	EQU	$FFC7
+0019 ffca                        OUTSTRGO	EQU	$FFCA
+0020 ffcd                        INCHAR	EQU	$FFCD
+0021 ffd0                        VECINIT	EQU	$FFD0
+0022 9200                        	ORG	$9200
+0023 9200 ce 90 00               	LDX	#ABOUTME
+0024 9203 bd ff bb               	JSR	OUT1BYT
+0025 9206 bd 91 23               	JSR	RAND
+0026 9209 bd 91 2d               	JSR	PRBINARY
+0027 920c 3f                     	SWI
+0028                             **************************************************************
+0029 0010                        BIT4	EQU	%00010000	; THIS EQUATE MAKES THE CODE MORE READABLE
+0030 92ff                        	ORG	$92FF
+0031 92ff bd ff c4               	JSR	OUTCRLF	* NEED THIS FOR OUTPUTS TO LINE UP!
+0032 9302 bd 91 23               	JSR	RAND
+0033 9305 97 00                  	STAA	$00
+0034 9307 bd 91 2d               	JSR	PRBINARY	* PRINT BEFORE
+0035 930a 96 00                  	LDAA	$00
+0036 930c 84 10                  	ANDA	#BIT4
+0037 930e 27 07                  	BEQ	NOPE
+0038 9310 ce 90 19               	LDX	#YESSTR
+0039 9313 bd ff c7               	JSR	OUTSTRG
+0040 9316 3f                     	SWI
+0041 9317 ce 90 1d               NOPE	LDX	#NOSTR
+0042 931a bd ff c7               	JSR	OUTSTRG
+0043 931d 3f                     	SWI
+0044                             **************************************************************
+0045 92cf                        	ORG	$92CF
+0046 92cf bd ff c4               	JSR	OUTCRLF	* NEED THIS FOR OUTPUTS TO LINE UP!
+0047 92d2 bd 91 23               	JSR	RAND
+0048 92d5 97 00                  	STAA	$00
+0049 92d7 bd 91 2d               	JSR	PRBINARY	* PRINT BEFORE
+0050 92da bd 92 f3               	JSR	TGLBIT4
+0051 92dd 96 00                  	LDAA	$00
+0052 92df bd 91 2d               	JSR	PRBINARY	* PRINT AFTER 1 TOGGLE
+0053 92e2 bd 92 f3               	JSR	TGLBIT4
+0054 92e5 96 00                  	LDAA	$00
+0055 92e7 bd 91 2d               	JSR	PRBINARY	* PRINT AFTER 2 TOGGLE
+0056 92ea bd 92 f3               	JSR	TGLBIT4
+0057 92ed 96 00                  	LDAA	$00
+0058 92ef bd 91 2d               	JSR	PRBINARY	* PRINT AFTER 3 TOGGLES
+0059 92f2 3f                     	SWI
+0060                             ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+0061                             ; Function: TGLBIT4
+0062                             ; Purpose: toggles bit #4 in memory location $00
+0063                             ; Registers modified none
+0064                             ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+0065 92f3 36                     TGLBIT4	PSHA
+0066 92f4 96 00                  	LDAA	$00
+0067 92f6 88 10                  	EORA	#%00010000
+0068 92f8 97 00                  	STAA	$00
+0069 92fa 32                     	PULA
+0070 92fb 39                     	RTS
+0071                             **************************************************************
+0072 927f                        	ORG	$927F
+0073 927f bd ff c4               	JSR	OUTCRLF	* NEED THIS FOR OUTPUTS TO LINE UP!
+0074 9282 bd 91 23               	JSR	RAND
+0075 9285 97 00                  	STAA	$00
+0076 9287 bd 91 2d               	JSR	PRBINARY	* PRINT BEFORE
+0077 928a bd 92 73               	JSR	SETBIT4
+0078 928d 96 00                  	LDAA	$00
+0079 928f bd 91 2d               	JSR	PRBINARY	* PRINT AFTER SET
+0080 9292 bd 92 9b               	JSR	CLRBIT4
+0081 9295 96 00                  	LDAA	$00
+0082 9297 bd 91 2d               	JSR	PRBINARY	* PRINT AFTER CLEAR
+0083 929a 3f                     	SWI
+0084                             ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+0085                             ; Function: CLRBIT4
+0086                             ; Purpose: Clears bit #4 in memory location $00
+0087                             ; Registers modified none
+0088                             ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+0089                             ;;;;;;;;;
+0090 929b 36                     CLRBIT4	PSHA
+0091 929c 96 00                  	LDAA	$00
+0092 929e 84 ef                  	ANDA	#%11101111
+0093 92a0 97 00                  	STAA	$00
+0094 92a2 32                     	PULA
+0095 92a3 39                     	RTS
+0096                             **************************************************************
+0097 925f                        	ORG	$925F
+0098 925f bd ff c4               	JSR	OUTCRLF	* NEED THIS FOR OUTPUTS TO LINE UP!
+0099 9262 bd 91 23               	JSR	RAND
+0100 9265 97 00                  	STAA	$00
+0101 9267 bd 91 2d               	JSR	PRBINARY	* PRINT BEFORE
+0102 926a bd 92 73               	JSR	SETBIT4
+0103 926d 96 00                  	LDAA	$00
+0104 926f bd 91 2d               	JSR	PRBINARY	* PRINT AFTER
+0105 9272 3f                     	SWI
+0106                             ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+0107                             ; Function: SETBIT4
+0108                             ; Purpose: SETS bit #4 in memory location $00
+0109                             ; Registers modified none
+0110                             ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+0111 9273 36                     SETBIT4	PSHA
+0112 9274 96 00                  	LDAA	$00
+0113 9276 8a 10                  	ORAA 	#%00010000
+0114 9278 97 00                  	STAA	$00
+0115 927a 32                     	PULA
+0116 927b 39                     	RTS
+0117                             ; program section: set origin to $9100
+0118 9100                        	ORG $9100	
+0119 9100 ce 90 00               	LDX	#ABOUTME * Starting address of the string
+0120 9103 bd ff c7               	JSR	OUTSTRG
+0121 9106 3f                     	SWI
+0122                             *the string with fcc command should end with 4
+0123 9107 04                     	FCB	4	; Do NOT forget this
+0124                             ************************************************************
+0125 911f                        	ORG	$911F
+0126 911f bd 91 23               	JSR	RAND
+0127 9122 3f                     	SWI
+0128                             ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+0129                             ; Function: RAND
+0130                             ; Purpose: Generate a random number
+0131                             ; Inputs: None
+0132                             ; Outputs: A random value returned in A registers
+0133                             ; Registers modified: A register (which has a random value)
+0134                             ; Memory usage
+0135                             ; The most recently generated random number is
+0136                             ; stored in memory with label LSTRAND
+0137                             ; This value is used to generate the next value
+0138                             ; Notes: Not the best random number generator around but does a
+0139                             ; halfway decent job.
+0140                             ; Implementation Notes
+0141                             ; shift the
+0142                             ; last random value left and add 20 with carry
+0143                             ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+0144 9123 b6 90 18               RAND	LDAA	LASTRND
+0145 9126 48                     	LSLA
+0146 9127 89 14                  	ADCA	#20
+0147 9129 b7 90 18               	STAA	LASTRND	; don’t forget to save it back
+0148 912c 39                     	RTS
+0149                             **********************************************************
+0150                             ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+0151                             ; Function: PRBINARY
+0152                             ; Purpose: To print a value in binary
+0153                             ; Inputs: Value to be printed is passed in the A register
+0154                             ; Returns: None;
+0155                             ; Registers affected: None. The values in the registers are stored
+0156                             ; first and these values are restored at the end.
+0157                             ; Notes: The output consists of two parts. The value in A is first
+0158                             ; printed in HEX, and then in binary;
+0159                             ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+0160 912d                        PRBINARY
+0161                             ; first save the registers we will be using: A, B and X
+0162 912d 36                     	PSHA
+0163 912e 37                     	PSHB
+0164 912f 3c                     	PSHX
+0165                             ; copy A to be for later use
+0166 9130 16                     	TAB
+0167                             ; print A as hex number (2 digits)
+0168                             ; print the left digit
+0169 9131 bd ff b2               	JSR	OUTLHLF
+0170                             ; the function destroys the value in A,
+0171                             ; so reload it! then print second digit
+0172 9134 17                     	TBA
+0173 9135 bd ff b5               	JSR	OUTRHLF
+0174                             ; now print a colon and some spaces
+0175 9138 86 3a                  	LDAA	#':'
+0176 913a bd ff b8               	JSR	OUTA
+0177 913d 86 20                  	LDAA	#' '
+0178 913f bd ff b8               	JSR	OUTA
+0179 9142 bd ff b8               	JSR	OUTA
+0180 9145 bd ff b8               	JSR	OUTA
+0181                             ;--> B has the value to be printed (recall the old TAB)
+0182                             ;--> Shift B to the left by one bit and print ’0’ or ’1’ depending
+0183                             ; on what is in the carry flag and repeat 8 times.
+0184                             ;--> Use X register as a counter
+0185                             ; to print what is in carry flag, and load A
+0186                             ; with the code for ’0’ ; then, add the carry to the code
+0187                             ; prior to calling OUTA
+0188 9148 ce 00 08               	LDX	#8	* COUNTER
+0189 914b 8c 00 00               PRBLOOP	CPX	#0
+0190 914e 27 0b                  	BEQ	PRBDONE
+0191 9150 86 30                  	LDAA	#'0'
+0192 9152 58                     	LSLB
+0193 9153 89 00                  	ADCA	#0
+0194 9155 bd ff b8               	JSR	OUTA
+0195 9158 09                     	DEX
+0196 9159 20 f0                  	BRA	PRBLOOP
+0197 915b bd ff c4               PRBDONE	JSR	OUTCRLF
+0198                             ; restore the registers
+0199 915e 38                     	PULX
+0200 915f 33                     	PULB
+0201 9160 32                     	PULA
+0202 9161 39                     	RTS
+0203                             ****************************************************************
+0204 9000                        	ORG $9000
+0205 9000 2f 49 4e 46 4f 52      ABOUTME FCC '/INFORMATION ABOUT YOU/'
+          4d 41 54 49 4f 4e
+          20 41 42 4f 55 54
+          20 59 4f 55 2f
+0206 9017 04                     	FCB	4
+0207 9018 00                     LASTRND	FCB	0
+0208 9019 59 45 53               YESSTR	FCC	'YES'
+0209 901c 04                     	FCB	4
+0210 901d 4e 4f                  NOSTR	FCC	'NO'
+0211 901f 04                     	FCB	4
+0212                             ***************************************************************
+
+
+Number of errors 0
+Number of warnings 0

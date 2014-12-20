@@ -1,0 +1,55 @@
+AS11M 01.05  Mon Nov 10, 2014 16:45  prog2.lst
+
+0001 ffa0                        UCASE	EQU 	$FFA0
+0002 ffa3                        WCHEK	EQU 	$FFA3
+0003 ffa6                        DCHEK	EQU 	$FFA6
+0004 ffa9                        INIT	EQU 	$FFA9	* use with caution
+0005 ffac                        INPUT	EQU 	$FFAC
+0006 ffaf                        OUTPUT	EQU 	$FFAF
+0007 ffb2                        OUTLHLF	EQU 	$FFB2
+0008 ffb5                        OUTRHLF	EQU 	$FFB5
+0009 ffb8                        OUTA	EQU 	$FFB8
+0010 ffbb                        OUT1BYT	EQU 	$FFBB
+0011 ffbe                        OUT1BSP	EQU 	$FFBE
+0012 ffc1                        OUT2BSP	EQU 	$FFC1
+0013 ffc4                        OUTCRLF	EQU 	$FFC4
+0014 ffc7                        OUTSTRG	EQU 	$FFC7
+0015 ffca                        OUTSTRGO EQU 	$FFCA
+0016 ffcd                        INCHAR	EQU 	$FFCD
+0017 ffd0                        VECINIT	EQU 	$FFD0
+0018 1000                        PORTA	EQU	$1000
+0019 1002                        PIOC	EQU	$1002
+0020                             
+0021 9000                        	ORG	$9000
+0022 9000 43 4c 4f 53 45 44      CLOSEDSTR	FCC	'CLOSED'
+0023 9006 0a 04                  	FCB	10,4
+0024 9008 4f 50 45 4e            OPENSTR		FCC	'OPEN'
+0025 900c 0a 04                  	FCB	10,4
+0026 900e 04                     CLOSED	FCB	4
+0027 900f 04                     OPEN	FCB	4
+0028                             
+0029 9200                        	ORG	$9200
+0030 9200 7f 10 00               	CLR	PORTA
+0031 9203 86 88                  	LDAA	#$88
+0032 9205 b7 90 0e               	STAA	CLOSED
+0033 9208 86 08                  	LDAA	#$08
+0034 920a b7 90 0f               	STAA	OPEN
+0035                             
+0036 920d                        MAIN	
+0037 920d b6 10 00               	LDAA	PORTA
+0038 9210 b1 90 0f               	CMPA	OPEN
+0039 9213 27 08                  	BEQ	OPENJSR
+0040 9215 ce 90 00               	LDX	#CLOSEDSTR
+0041 9218 bd ff ca               	JSR	OUTSTRGO
+0042 921b 20 f0                  	BRA	MAIN
+0043 921d                        OPENJSR
+0044 921d ce 90 08               	LDX	#OPENSTR
+0045 9220 bd ff ca               	JSR	OUTSTRGO
+0046 9223 20 e8                  	BRA	MAIN
+0047                             
+0048                             	
+0049                             	
+
+
+Number of errors 0
+Number of warnings 0

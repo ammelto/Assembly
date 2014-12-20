@@ -1,0 +1,66 @@
+;====================================================
+;Program that will
+;Multiply V1 by 4 and store the result in a variable called V2.
+;Add V1 and V2 and store the result in a variable called V3.
+;Multiply V3 by 2 and store the result in a variable called V4.
+;==================================================== OUTLHLF	EQU	$FFB2
+OUTRHLF	EQU	$FFB5
+INCHAR	EQU 	$FFCD
+OUTSTRG	EQU	$FFC7
+OUTCRLF EQU	$FFC4
+
+	ORG	$8000
+MAIN
+	LDX	#PROMPT
+	JSR	OUTSTRG
+	JSR	OUTCRLF
+	LDX	#V1P
+	JSR	OUTSTRG
+	JSR	INCHAR
+	ANDA	#$0F
+	STAA	V1
+	LSLA
+	LSLA
+	STAA	V2
+	ADDA	V1
+	STAA	V3
+	LSLA
+	STAA	V4
+	LDX	#V2P
+	JSR	OUTSTRG
+	LDAA	V2
+	JSR	OUTLHLF
+	LDAA	V2
+	JSR	OUTRHLF
+	LDX	#V3P
+	JSR	OUTSTRG
+	LDAA	V3
+	JSR	OUTLHLF
+	LDAA	V3
+	JSR	OUTRHLF
+	LDX	#V4P
+	JSR	OUTSTRG
+	LDAA	V4
+	JSR	OUTLHLF
+	LDAA	V4
+	JSR	OUTRHLF
+	SWI
+
+
+	ORG	$9000
+V1	FCB	1
+V2	FCB	1
+V3	FCB	1
+V4	FCB	1
+
+PROMPT	FCC	'Value for V1?'
+	FCB	4
+V1P	FCC	'V1 = 0'
+	FCB	4
+V2P	FCC	'V2 = '
+	FCB	4
+V3P	FCC	'V3 = '
+	FCB	4
+V4P	FCC	'V4 = '
+	FCB	4
+	OPT	S

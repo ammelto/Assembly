@@ -1,0 +1,186 @@
+AS11M 01.05  Mon Oct 20, 2014 17:39  prog4.lst
+
+0001                             
+0002                             * Here is a program that uses the function:
+0003                             *
+0004                             * Name: your name goes here
+0005                             * Class: ENSC 3213 (or your course number)
+0006                             * Term:
+0007                             * The academic term
+0008                             * Date: Date you started the code
+0009                             *
+0010                             
+0011 ffa0                        UCASE	EQU 	$FFA0
+0012 ffa3                        WCHEK	EQU 	$FFA3
+0013 ffa6                        DCHEK	EQU 	$FFA6
+0014 ffa9                        INIT	EQU 	$FFA9	* use with caution
+0015 ffac                        INPUT	EQU 	$FFAC
+0016 ffaf                        OUTPUT	EQU 	$FFAF
+0017 ffb2                        OUTLHLF	EQU 	$FFB2
+0018 ffb5                        OUTRHLF	EQU	$FFB5
+0019 ffb8                        OUTA	EQU	$FFB8
+0020 ffbb                        OUT1BYT	EQU	$FFBB
+0021 ffbe                        OUT1BSP	EQU 	$FFBE
+0022 ffc1                        OUT2BSP	EQU 	$FFC1
+0023 ffc4                        OUTCRLF	EQU 	$FFC4
+0024 ffc7                        OUTSTRG	EQU 	$FFC7
+0025 ffca                        OUTSTRGO EQU 	$FFCA
+0026 ffcd                        INCHAR	EQU 	$FFCD
+0027 ffd0                        VECINIT	EQU 	$FFD0
+0028                             
+0029 9000                        	ORG $9000
+0030                             
+0031                             ; setup some strings
+0032 9000                        PREAMBLE
+0033 9000 3d 3d 3d 3d 3d 3d      	FCC	'====================================='
+          3d 3d 3d 3d 3d 3d
+          3d 3d 3d 3d 3d 3d
+          3d 3d 3d 3d 3d 3d
+          3d 3d 3d 3d 3d 3d
+          3d 3d 3d 3d 3d 3d
+          3d
+0034 9025 0a                     	FCB 	10
+0035 9026 4c 41 42 20 4f 4e      	FCC	'LAB ON USING TABLES'
+          20 55 53 49 4e 47
+          20 54 41 42 4c 45
+          53
+0036 9039 0a 0a                  	FCB 10,10	* USE 10 TO START A NEW LINE
+0037 903b 4e 41 4d 45 3a 20      	FCC	'NAME: _____________________'
+          5f 5f 5f 5f 5f 5f
+          5f 5f 5f 5f 5f 5f
+          5f 5f 5f 5f 5f 5f
+          5f 5f 5f
+0038 9056 0a                     	FCB 10
+0039 9057 54 48 49 53 20 50      	FCC	'THIS PROGRAM IS AN INFINITE LOOP!'
+          52 4f 47 52 41 4d
+          20 49 53 20 41 4e
+          20 49 4e 46 49 4e
+          49 54 45 20 4c 4f
+          4f 50 21
+0040 9078 0a                     	FCB 10
+0041 9079 48 49 54 20 54 48      	FCC	'HIT THE RESET BUTTON TO QUIT/'
+          45 20 52 45 53 45
+          54 20 42 55 54 54
+          4f 4e 20 54 4f 20
+          51 55 49 54 2f
+0042 9096 0a                     	FCB 10
+0043 9097 3d 3d 3d 3d 3d 3d      	FCC	'====================================='
+          3d 3d 3d 3d 3d 3d
+          3d 3d 3d 3d 3d 3d
+          3d 3d 3d 3d 3d 3d
+          3d 3d 3d 3d 3d 3d
+          3d 3d 3d 3d 3d 3d
+          3d
+0044 90bc 0a 0a 0a 04            	FCB 	10,10,10,4
+0045 90c0 49 53 20 41 20 56      YESSTR	FCC 'IS A VOWEL'
+          4f 57 45 4c
+0046 90ca 0a 04                  	FCB 10,4
+0047 90cc 49 53 20 4e 4f 54      NOSTR	FCC	'IS NOT A VOWEL'
+          20 41 20 56 4f 57
+          45 4c
+0048 90da 0a 04                  	FCB 10,4
+0049 90dc 20 41 4e 44 20 49      YESSYM	FCC	' AND IS SYMMETRICAL'
+          53 20 53 59 4d 4d
+          45 54 52 49 43 41
+          4c
+0050 90ef 0a 04                  	FCB 10,4
+0051 90f1 20 41 4e 44 20 49      NOSYM	FCC	' AND IS NOT SYMMETRICAL'
+          53 20 4e 4f 54 20
+          53 59 4d 4d 45 54
+          52 49 43 41 4c
+0052 9108 0a 04                  	FCB 10,4
+0053                             
+0054                             ; setup the table of vowels
+0055 910a 41 48 49 4d 4f 54      SYM	FCC	'AHIMOTUVWXYimnouvwxy'
+          55 56 57 58 59 69
+          6d 6e 6f 75 76 77
+          78 79
+0056 0014                        NSYM	EQU	20
+0057 911e 61 65 69 6f 75 41      VOWELS	FCC	'aeiouAEIOU'
+          45 49 4f 55
+0058 000a                        NVOWELS	EQU	 10
+0059 9200                        	ORG	$9200
+0060 9200 ce 90 00               	LDX #PREAMBLE
+0061 9203 bd ff c7               	JSR OUTSTRG
+0062 9206                        MAINLOOP
+0063 9206 bd ff cd               	JSR	INCHAR
+0064 9209 ce 91 1e               	LDX	#VOWELS
+0065 920c c6 0a                  	LDAB	#NVOWELS
+0066 920e bd 92 3c               	JSR	LOOKUP
+0067 9211 25 19                  	BCS	ISVOWEL
+0068 9213 ce 90 cc               	LDX	#NOSTR
+0069 9216 bd ff ca               	JSR	OUTSTRGO
+0070 9219                        SYMLOOP
+0071 9219 0c                     	CLC
+0072 921a ce 91 0a               	LDX	#SYM
+0073 921d c6 14                  	LDAB	#NSYM
+0074 921f bd 92 51               	JSR	LOOKUPSYM
+0075 9222 25 10                  	BCS	ISSYM
+0076 9224 ce 90 f1               	LDX	#NOSYM
+0077 9227 bd ff ca               	JSR	OUTSTRGO
+0078 922a 20 da                  	BRA	MAINLOOP
+0079 922c                        ISVOWEL
+0080 922c ce 90 c0               	LDX 	#YESSTR
+0081 922f bd ff ca               	JSR 	OUTSTRGO
+0082 9232 20 e5                  	BRA	SYMLOOP
+0083 9234                        ISSYM
+0084 9234 ce 90 dc               	LDX	 #YESSYM
+0085 9237 bd ff ca               	JSR	OUTSTRGO
+0086 923a 20 ca                  	BRA	MAINLOOP	
+0087                             ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+0088                             ; lookup: Function to lookup a value in a table
+0089                             ; Checks if the value in A register is in the table
+0090                             ;
+0091                             ; Entry: Starting address in X, size in B, value in A
+0092                             ;	 Exit:
+0093                             ;	Carry set if the value in A is in the table;
+0094                             ; cleared if not in the table
+0095                             ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+0096 923c                        LOOKUP
+0097 923c 37                     	PSHB
+0098 923d 3c                     	PSHX
+0099 923e                        STRTLP
+0100                             	
+0101 923e 5d                     	TSTB
+0102 923f 27 08                  	BEQ	 GOHERE		* this is the basic counting loop
+0103 9241 a1 00                  	CMPA	0,X
+0104 9243 27 08                  	BEQ 	FOUND
+0105 9245 08                     	INX
+0106 9246 5a                     	DECB
+0107 9247 20 f5                  	BRA STRTLP
+0108 9249                        GOHERE
+0109 9249 0c                     	CLC
+0110 924a 38                     	PULX
+0111 924b 33                     	PULB
+0112 924c 39                     	RTS
+0113 924d                        FOUND
+0114 924d 0d                     	SEC
+0115 924e 38                     	PULX
+0116 924f 33                     	PULB
+0117 9250 39                     	RTS
+0118                             *******************************************************************
+0119 9251                        LOOKUPSYM
+0120 9251 37                     	PSHB
+0121 9252 3c                     	PSHX
+0122 9253                        STRTLPSYM
+0123 9253 5d                     	TSTB
+0124 9254 27 08                  	BEQ	 GOHERESYM		* this is the basic counting loop
+0125 9256 a1 00                  	CMPA	0,X
+0126 9258 27 08                  	BEQ 	FOUNDSYM
+0127 925a 08                     	INX
+0128 925b 5a                     	DECB
+0129 925c 20 f5                  	BRA STRTLPSYM
+0130 925e                        GOHERESYM
+0131 925e 0c                     	CLC
+0132 925f 38                     	PULX
+0133 9260 33                     	PULB
+0134 9261 39                     	RTS
+0135 9262                        FOUNDSYM
+0136 9262 0d                     	SEC
+0137 9263 38                     	PULX
+0138 9264 33                     	PULB
+0139 9265 39                     	RTS
+
+
+Number of errors 0
+Number of warnings 0

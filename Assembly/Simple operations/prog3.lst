@@ -1,0 +1,89 @@
+AS11M 01.05  Mon Oct 13, 2014 16:24  prog3.lst
+
+0001 ffb2                        OUTLHLF	EQU	$FFB2
+0002 ffb5                        OUTRHLF	EQU	$FFB5
+0003 ffcd                        INCHAR	EQU 	$FFCD
+0004 ffc7                        OUTSTRG	EQU	$FFC7
+0005 ffc4                        OUTCRLF EQU	$FFC4
+0006                             
+0007 8000                        	ORG	$8000
+0008 8000                        MAIN
+0009 8000 ce 90 04               	LDX	#PROMPT
+0010 8003 bd ff c7               	JSR	OUTSTRG
+0011 8006 bd ff c4               	JSR	OUTCRLF
+0012 8009 ce 90 14               	LDX	#V1P
+0013 800c bd ff c7               	JSR	OUTSTRG
+0014 800f bd ff cd               	JSR	INCHAR
+0015 8012 84 0f                  	ANDA	#$0F
+0016 8014 b7 90 00               	STAA	V1
+0017 8017 48                     	LSLA
+0018 8018 48                     	LSLA
+0019 8019 b7 90 01               	STAA	V2
+0020 801c bb 90 00               	ADDA	V1
+0021 801f b7 90 02               	STAA	V3
+0022 8022 48                     	LSLA
+0023 8023 b7 90 03               	STAA	V4
+0024 8026 ce 90 1b               	LDX	#V2P
+0025 8029 bd ff c7               	JSR	OUTSTRG
+0026 802c b6 90 01               	LDAA	V2
+0027 802f bd ff b2               	JSR	OUTLHLF
+0028 8032 b6 90 01               	LDAA	V2
+0029 8035 bd ff b5               	JSR	OUTRHLF
+0030 8038 ce 90 21               	LDX	#V3P
+0031 803b bd ff c7               	JSR	OUTSTRG
+0032 803e b6 90 02               	LDAA	V3
+0033 8041 bd ff b2               	JSR	OUTLHLF
+0034 8044 b6 90 02               	LDAA	V3
+0035 8047 bd ff b5               	JSR	OUTRHLF
+0036 804a ce 90 27               	LDX	#V4P
+0037 804d bd ff c7               	JSR	OUTSTRG
+0038 8050 b6 90 03               	LDAA	V4
+0039 8053 bd ff b2               	JSR	OUTLHLF
+0040 8056 b6 90 03               	LDAA	V4
+0041 8059 bd ff b5               	JSR	OUTRHLF
+0042 805c 3f                     	SWI
+0043                             
+0044                             
+0045 9000                        	ORG	$9000
+0046 9000 01                     V1	FCB	1
+0047 9001 01                     V2	FCB	1
+0048 9002 01                     V3	FCB	1
+0049 9003 01                     V4	FCB	1
+0050                             
+0051 9004 48 6f 77 20 6d 61      PROMPT	FCC	'How many times?'
+          6e 79 20 74 69 6d
+          65 73 3f
+0052 9013 04                     	FCB	4
+0053 9014 56 31 20 3d 20 30      V1P	FCC	'V1 = 0'
+0054 901a 04                     	FCB	4
+0055 901b 56 32 20 3d 20         V2P	FCC	'V2 = '
+0056 9020 04                     	FCB	4
+0057 9021 56 33 20 3d 20         V3P	FCC	'V3 = '
+0058 9026 04                     	FCB	4
+0059 9027 56 34 20 3d 20         V4P	FCC	'V4 = '
+0060 902c 04                     	FCB	4
+0061                             	OPT	S
+
+AS11M 01.05  Mon Oct 13, 2014 16:24  prog3.lst
+
+Symbol table:
+
+INCHAR           ffcd
+MAIN             8000
+OUTCRLF          ffc4
+OUTLHLF          ffb2
+OUTRHLF          ffb5
+OUTSTRG          ffc7
+PROMPT           9004
+V1               9000
+V1P              9014
+V2               9001
+V2P              901b
+V3               9002
+V3P              9021
+V4               9003
+V4P              9027
+
+
+Number of errors 0
+Number of warnings 0
